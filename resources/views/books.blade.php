@@ -51,8 +51,8 @@
 <template>       
   <v-form action="{{route('books.index')}}" method="GET">
       @csrf
-
-      <example-component :items="items" ></example-component>
+    <example-component></example-component>
+      
       <v-btn color="primary" type="submit" class="btn btn-primary mb-2">
     検索
     </v-btn>
@@ -71,11 +71,12 @@
     
     </v-container>
   </v-form>
+  
 </template>
  </div>
                 
             </div>
-        
+            <date-component></date-component>
    
     <!-- Book: 既に登録されてる本のリスト -->
      <!-- 現在の本 -->

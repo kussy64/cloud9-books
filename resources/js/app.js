@@ -43,6 +43,7 @@ window.Vue = require('vue');
  */
 import HeaderComponent from "./components/HeaderComponent";
 import ExampleComponent from "./components/ExampleComponent";
+import DateComponent from "./components/DateComponent";
 import Vue from 'vue';
 import Vuetify from 'vuetify';
 import 'vuetify/dist/vuetify.min.css';
@@ -68,6 +69,7 @@ Vue.use(Vuetify);
 
 Vue.component('header-component', require('./components/HeaderComponent.vue').default);
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('date-component', require('./components/DateComponent.vue').default);
 
 Vue.component('v-select', require('vue-select').default);
 //import vuetify from './plugins/vuetify';
@@ -87,7 +89,7 @@ new Vue({
     }),
     //router,
     iconfont: 'mdi',
-    components: { HeaderComponent,ExampleComponent},
+    components: { HeaderComponent,ExampleComponent,DateComponent},
     //template: '<App />'
 });
 
