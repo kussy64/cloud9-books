@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-  <v-app>    
+  <v-app> 
+    <v-container fluid>
       <v-row>
             
               <v-text-field
@@ -47,6 +48,7 @@
             ></v-date-picker>
 
       </v-row>
+    </v-container>
 </v-app>
 </div>
 </template>
