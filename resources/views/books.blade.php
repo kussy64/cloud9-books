@@ -76,7 +76,6 @@
  </div>
                 
             </div>
-            <date-component></date-component>
    
     <!-- Book: 既に登録されてる本のリスト -->
      <!-- 現在の本 -->

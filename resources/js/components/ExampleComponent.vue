@@ -5,6 +5,7 @@
       <v-row
         align="center"
       >
+        <template>
           <v-autocomplete
           v-model="model"
           type="text"
@@ -15,6 +16,7 @@
             
           >
           </v-autocomplete>
+          </template>
           </v-row>
           <v-row>
             <v-menu
@@ -37,6 +39,8 @@
                 readonly
                 v-bind="attrs"
                 v-on="on"
+                name="date"
+                :value="$date"
                 class="custom-picker"
       ></v-text-field>
     </template>

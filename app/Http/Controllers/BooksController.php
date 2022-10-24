@@ -31,6 +31,15 @@ public function index(Request $request)
             $books = Book::where('user_id',Auth::user()->id)->orderBy('created_at', 'asc')->paginate(4);
         }
         return view('books', compact('books','keyword'));
+        
+        $date = $request->input('date');
+        if (!empty($date)) {
+            $books = Book::where('published', 'LIKE', "%{$date}%")->where('user_id',Auth::user()->id)->orderBy('created_at', 'asc')->paginate(4);
+        }
+        else {
+            $books = Book::where('user_id',Auth::user()->id)->orderBy('created_at', 'asc')->paginate(4);
+        }
+        return view('books', compact('books','date'));
     }
     
     //更新画面
