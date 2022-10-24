@@ -17,7 +17,16 @@
           </v-autocomplete>
           </v-row>
           <v-row>
-                              <v-text-field
+            <v-menu
+    ref="menu"
+    v-model="menu"
+    :close-on-content-click="false"
+    :return-value.sync="targetDate"
+    min-width="auto"
+  >
+    <template #activator="{ on, attrs }">
+      <v-text-field
+        v-model="targetDate"
                 :value="computedReceiptDateStart"
                 @click:clear="formSearch.receipt_date_start = null"
                 clearable
@@ -29,11 +38,20 @@
                 v-bind="attrs"
                 v-on="on"
                 class="custom-picker"
-              ></v-text-field>
-            
-        <div class="custom-between">
-          〜
-        </div>
+      ></v-text-field>
+    </template>
+    <v-date-picker
+      v-model="targetDate"
+      locale="ja"
+      @input="
+        $refs.menu.save(targetDate)
+        menu = false
+      "
+    >
+    </v-date-picker>
+  </v-menu>
+          </v-row>
+          <v-row>
                         <v-text-field
                 :value="computedReceiptDateEnd"
                 @click:clear="formSearch.receipt_date_end = null"
