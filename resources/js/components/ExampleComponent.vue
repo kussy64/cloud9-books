@@ -9,11 +9,10 @@
           <v-autocomplete
           v-model="model"
           type="text"
+          :items="items"
           name="keyword"
           :value="$keyword"
-          :items="items"
-            outlined
-            
+          outlined
           >
           </v-autocomplete>
           </template>
@@ -29,7 +28,6 @@
     <template #activator="{ on, attrs }">
       <v-text-field
         v-model="targetDate"
-                :value="computedReceiptDateStart"
                 @click:clear="formSearch.receipt_date_start = null"
                 clearable
                 outlined
