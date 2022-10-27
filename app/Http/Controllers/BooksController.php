@@ -25,11 +25,12 @@ public function index(Request $request)
     {
         $keyword = $request->input('keyword');
         $date = $request->input('date');
+        $newdate = $request->input('newdate');
         if (!empty($keyword)) {
-            $books = Book::where('item_name', 'LIKE', "%{$keyword}%")->orwhere('item_text', 'LIKE', "%{$keyword}%")->orwhereBetween('published', [$date,'2022-08-01'])->where('user_id',Auth::user()->id)->orderBy('created_at', 'asc')->paginate(4);
+            $books = Book::where('item_name', 'LIKE', "%{$keyword}%")->orwhere('item_text', 'LIKE', "%{$keyword}%")->orwhereBetween('published', [$date,$newdate])->where('user_id',Auth::user()->id)->orderBy('created_at', 'asc')->paginate(4);
         }
         elseif (empty($keyword)){
-            $books = Book::whereBetween('published', [$date,'2025-09-01'])->where('user_id',Auth::user()->id)->orderBy('created_at', 'asc')->paginate(4);
+            $books = Book::whereBetween('published', [$date,$newdate])->where('user_id',Auth::user()->id)->orderBy('created_at', 'asc')->paginate(4);
         }elseif (empty($date)){
             $books = Book::where('item_name', 'LIKE', "%{$keyword}%")->orwhere('item_text', 'LIKE', "%{$keyword}%")->where('user_id',Auth::user()->id)->orderBy('created_at', 'asc')->paginate(4);
         }else {

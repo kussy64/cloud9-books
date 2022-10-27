@@ -32,7 +32,7 @@
                 clearable
                 outlined
                 dense
-                label="伝票日付(開始)"
+                label="日付(開始)"
                 prepend-icon=""
                 readonly
                 v-bind="attrs"
@@ -54,19 +54,40 @@
   </v-menu>
           </v-row>
           <v-row>
+            <v-menu
+    ref="menu2"
+    v-model="menu2"
+    :close-on-content-click="false"
+    :return-value.sync="targetDate2"
+    min-width="auto"
+  >
+    <template #activator="{ on, attrs }">
                         <v-text-field
-                :value="computedReceiptDateEnd"
+                v-model="targetDate2"
                 @click:clear="formSearch.receipt_date_end = null"
                 clearable
                 outlined
                 dense
-                label="伝票日付(終了)"
+                label="日付(終了)"
                 prepend-icon=""
                 readonly
                 v-bind="attrs"
                 v-on="on"
+                name="enddate"
+                :value="$enddate"
                 class="custom-picker"
               ></v-text-field>
+    </template>
+    <v-date-picker
+      v-model="targetDate2"
+      locale="ja"
+      @input="
+        $refs.menu2.save(targetDate2)
+        menu2 = false
+      "
+    >
+    </v-date-picker>
+  </v-menu>
       </v-row>
 
     </v-container>
