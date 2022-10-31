@@ -57,6 +57,8 @@
     検索
     </v-btn>
     
+  <div class="btn btn-primary font-weight-bold"> CSVダウンロード</>
+
       
         <v-container>
 

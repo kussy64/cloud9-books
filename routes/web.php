@@ -22,6 +22,8 @@ Route::post('/booksedit/{books}','BooksController@edit');
 //更新処理totodoo
 Route::post('/books/update','BooksController@update');
 
+//CSVダウンロード
+Route::get('/', [BooksController::class, 'postCsv'])->name('books.postCsv');
 
 //本を削除
 Route::delete('/book/{book}','BooksController@destroy');

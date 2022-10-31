@@ -151,6 +151,38 @@ public function index(Request $request)
         $book->delete();
         return redirect('/')->with('message', '削除が完了しました');
     }
-    
-    
+    //CSV処理
+        public function postCsv(Request $request) {
+        return response()->streamDownload(
+            function () {
+                // 出力バッファをopen
+                $stream = fopen('php://output', 'w');
+                // 文字コードをShift-JISに変換
+                stream_filter_prepend($stream,'convert.iconv.utf-8/cp932//TRANSLIT');
+                // ヘッダー
+                fputcsv($stream, [
+                    'item_name',
+                    'last_name',
+                    'postcode',
+                    'address',
+                    'phone',
+                    'email',
+                    'birthday',
+                    'note',
+                ]);
+                // データ
+                foreach (Book::cursor() as $customer) {
+                    fputcsv($stream, [
+                        $customer->item_name, 
+                    ]);
+                }
+                fclose($stream);
+            }, 
+            'customers.csv',
+            [
+                'Content-Type' => 'application/octet-stream',
+            ]
+        );
+    }
+
 }
