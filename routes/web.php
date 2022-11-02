@@ -23,7 +23,7 @@ Route::post('/booksedit/{books}','BooksController@edit');
 Route::post('/books/update','BooksController@update');
 
 //CSVダウンロード
-Route::get('/', [BooksController::class, 'postCsv'])->name('books.postCsv');
+Route::get('/csv', [BooksController::class, 'postCsv'])->name('books.postCsv');
 
 //本を削除
 Route::delete('/book/{book}','BooksController@destroy');

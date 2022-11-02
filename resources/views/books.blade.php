@@ -57,7 +57,7 @@
     検索
     </v-btn>
     
-  <div class="btn btn-primary font-weight-bold"> CSVダウンロード</>
+  
 
       
         <v-container>
@@ -76,9 +76,17 @@
   
 </template>
  </div>
-                
-            </div>
-   
+ </div>
+ <template>
+ <div class="card-body">
+ <v-form action="{{ route('books.postCsv')}}" method="GET">
+     @csrf
+               <v-btn color="primary" type="submit" class="btn btn-primary mb-2">
+    CSVダウンロード
+    </v-btn> 
+               </v-form>
+            </template>
+ </div>
     <!-- Book: 既に登録されてる本のリスト -->
      <!-- 現在の本 -->
      <!-- <thead>

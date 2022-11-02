@@ -162,18 +162,21 @@ public function index(Request $request)
                 // ヘッダー
                 fputcsv($stream, [
                     'item_name',
-                    'last_name',
-                    'postcode',
-                    'address',
-                    'phone',
-                    'email',
-                    'birthday',
-                    'note',
+                    'item_text',
+                    'item_number',
+                    'item_amount',
+                    'item_img',
+                    'published',
                 ]);
                 // データ
                 foreach (Book::cursor() as $customer) {
                     fputcsv($stream, [
                         $customer->item_name, 
+                        $customer->item_text,
+                        $customer->item_number,
+                        $customer->item_amount,
+                        $customer->item_img,
+                        $customer->published,
                     ]);
                 }
                 fclose($stream);
