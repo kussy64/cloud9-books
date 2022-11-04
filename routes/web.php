@@ -19,9 +19,11 @@ Route::post('/books/store','BooksController@store');
 Route::get('/booksedit/{books}', 'BooksController@edit')->name('booksedit');
 Route::post('/booksedit/{books}','BooksController@edit');
 
-//更新処理totodoo
+//更新処理
 Route::post('/books/update','BooksController@update');
 
+//CSVアップロード
+Route::post('/books/upload', 'BooksController@upload');
 //CSVダウンロード
 Route::get('/csv', [BooksController::class, 'postCsv'])->name('books.postCsv');
 

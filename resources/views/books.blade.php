@@ -14,6 +14,30 @@
     <v-row justify="center">
     <v-col>
     <div class="card-body">
+        
+                        <v-card-title class="font-weight-bold">
+            CSVインポート機能：
+<v-form action="{{ url('books/upload')}}" method="POST" enctype="multipart/form-data">
+     @csrf
+     <input type="file" name="csvdata" />
+               <v-btn color="primary" type="submit" class="btn btn-primary">
+    CSVアップロード
+    </v-btn> 
+               </v-form>
+
+        </v-card-title>
+        
+                <v-card-title class="font-weight-bold">
+            CSV出力機能：
+<v-form action="{{ route('books.postCsv')}}" method="GET">
+     @csrf
+               <v-btn color="primary" type="submit" class="btn btn-primary">
+    CSVダウンロード
+    </v-btn> 
+               </v-form>
+
+        </v-card-title>
+        
         <v-card-title class="font-weight-bold">
             ～登録した書籍一覧～　：
                     <form action="{{ url('/booksregister') }}" method="POST">
@@ -22,6 +46,7 @@
                     新規登録
                 </v-btn>
         </form>
+
         </v-card-title>
 
         <!-- バリデーションエラーの表示に使用-->
@@ -46,7 +71,8 @@
 
                
 
- <div class="form-inline mx-12 my-lg-0">
+ <div class="form-inline mx-12 my-lg-12">
+
         
 <template>       
   <v-form action="{{route('books.index')}}" method="GET">
@@ -60,7 +86,7 @@
   
 
       
-        <v-container>
+        
 
                       
       </v-col>
@@ -71,21 +97,12 @@
     
     
     
-    </v-container>
+    
   </v-form>
-  
+                
 </template>
  </div>
  </div>
- <template>
- <div class="card-body">
- <v-form action="{{ route('books.postCsv')}}" method="GET">
-     @csrf
-               <v-btn color="primary" type="submit" class="btn btn-primary mb-2">
-    CSVダウンロード
-    </v-btn> 
-               </v-form>
-            </template>
  </div>
     <!-- Book: 既に登録されてる本のリスト -->
      <!-- 現在の本 -->

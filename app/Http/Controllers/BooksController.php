@@ -161,6 +161,7 @@ public function index(Request $request)
                 stream_filter_prepend($stream,'convert.iconv.utf-8/cp932//TRANSLIT');
                 // ヘッダー
                 fputcsv($stream, [
+                    'user_id',
                     'item_name',
                     'item_text',
                     'item_number',
@@ -171,6 +172,7 @@ public function index(Request $request)
                 // データ
                 foreach (Book::cursor() as $customer) {
                     fputcsv($stream, [
+                        $customer->user_id,
                         $customer->item_name, 
                         $customer->item_text,
                         $customer->item_number,
@@ -187,5 +189,35 @@ public function index(Request $request)
             ]
         );
     }
+    public function upload(Request $request) {
+        
+        // 一旦アップロードされたCSVファイルを受け取り保存
+        $uploaded_file = $request->file('csvdata'); // inputのnameはcsvdata
+        $orgName = date('YmdHis') ."_".$request->file('csvdata')->getClientOriginalName();
+        $spath = storage_path('app\\');
+        $path = $spath.$request->file('csvdata')->storeAs('',$orgName);
+        
+        //CSVファイル読み込み
+        $result = (new FastExcel)->configureCsv(',')->importSheets($path);
+        
+        //DB登録処理
+        foreach ($result as $row) {
+            foreach($row as $item){
+                //CSV内データとテーブルのカラムを紐付け（左側カラム名、右側CSV１行目の項目名）
+                $param = [
+                    'user_id' => '"'.$item["user_id"].'"',
+                    'item_name' => '"'.$item["item_name"],
+                    'item_text' => '"'.$item["item_text"].'"',
+                    'item_number' => '"'.$item["item_number"].'"',
+                    'item_amount' => '"'.$item["item_amount"].'"',
+                    'item_img' => '"'.$item["item_img"].'"',
+                    'published' => '"'.$item["published"].'"',
+                        ];
+                Book::table('books')->insert($param);
+            }
+                
+    }
+
+}
 
 }
