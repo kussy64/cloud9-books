@@ -17,7 +17,7 @@
         
                         <v-card-title class="font-weight-bold">
             CSVインポート機能：
-<v-form action="{{ url('books/upload')}}" method="POST" enctype="multipart/form-data">
+<v-form action="{{ url('books/import')}}" method="POST" enctype="multipart/form-data">
      @csrf
      <input type="file" name="csvdata" />
                <v-btn color="primary" type="submit" class="btn btn-primary">

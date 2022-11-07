@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Book;   //Bookモデルを使えるようにする
 use Validator;  //バリデーションを使えるようにする
 use Auth;       //認証モデルを使用する
+use SplFileObject;
+
 
 class BooksController extends Controller
 {
@@ -189,35 +191,64 @@ public function index(Request $request)
             ]
         );
     }
-    public function upload(Request $request) {
+    public function import(Request $request)
+    {
+
+    //全件削除
+    Book::truncate();
+
+    // ロケールを設定(日本語に設定)
+    setlocale(LC_ALL, 'ja_JP.UTF-8');
+
+    // アップロードしたファイルを取得
+    // 'csvdata' はビューの inputタグのname属性
+    $uploaded_file = $request->file('csvdata');
+
+    // アップロードしたファイルの絶対パスを取得
+    $file_path = $request->file('csvdata')->path($uploaded_file);
+
+    //SplFileObjectを生成
+    $file = new SplFileObject($file_path);
+
+    $file->setFlags(SplFileObject::READ_CSV);
+
+
+    $row_count = 1;
+    
+    //取得したオブジェクトを読み込み
+    foreach ($file as $row)
+    {
+        // 最終行の処理(最終行が空っぽの場合の対策
+        if ($row === [null]) continue; 
         
-        // 一旦アップロードされたCSVファイルを受け取り保存
-        $uploaded_file = $request->file('csvdata'); // inputのnameはcsvdata
-        $orgName = date('YmdHis') ."_".$request->file('csvdata')->getClientOriginalName();
-        $spath = storage_path('app\\');
-        $path = $spath.$request->file('csvdata')->storeAs('',$orgName);
-        
-        //CSVファイル読み込み
-        $result = (new FastExcel)->configureCsv(',')->importSheets($path);
-        
-        //DB登録処理
-        foreach ($result as $row) {
-            foreach($row as $item){
-                //CSV内データとテーブルのカラムを紐付け（左側カラム名、右側CSV１行目の項目名）
-                $param = [
-                    'user_id' => '"'.$item["user_id"].'"',
-                    'item_name' => '"'.$item["item_name"],
-                    'item_text' => '"'.$item["item_text"].'"',
-                    'item_number' => '"'.$item["item_number"].'"',
-                    'item_amount' => '"'.$item["item_amount"].'"',
-                    'item_img' => '"'.$item["item_img"].'"',
-                    'published' => '"'.$item["published"].'"',
-                        ];
-                Book::table('books')->insert($param);
-            }
-                
+        // 1行目のヘッダーは取り込まない
+        if ($row_count > 1)
+        {
+            // CSVの文字コードがSJISなのでUTF-8に変更
+            $user_id = mb_convert_encoding($row[0], 'UTF-8', 'SJIS');
+            $item_name = mb_convert_encoding($row[1], 'UTF-8', 'SJIS');
+            $item_text = mb_convert_encoding($row[2], 'UTF-8', 'SJIS');
+            $item_number = mb_convert_encoding($row[3], 'UTF-8', 'SJIS');
+            $item_amount = mb_convert_encoding($row[4], 'UTF-8', 'SJIS');
+            $item_img = mb_convert_encoding($row[5], 'UTF-8', 'SJIS');
+            $published = mb_convert_encoding($row[6], 'UTF-8', 'SJIS');
+            
+            
+            //1件ずつインポート
+                Book::insert(array(
+                    'user_id' => $user_id, 
+                    'item_name' => $item_name, 
+                    'item_text' => $item_text,
+                    'item_number' => $item_number,
+                    'item_amount' => $item_amount,
+                    'item_img' => $item_img,
+                    'published' => $published
+                ));
+        }
+        $row_count++;
     }
+    
 
+    }
 }
 
-}
