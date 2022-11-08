@@ -232,6 +232,8 @@ public function index(Request $request)
             $item_amount = mb_convert_encoding($row[4], 'UTF-8', 'SJIS');
             $item_img = mb_convert_encoding($row[5], 'UTF-8', 'SJIS');
             $published = mb_convert_encoding($row[6], 'UTF-8', 'SJIS');
+            $created_at = mb_convert_encoding($row[7], 'UTF-8', 'SJIS');
+            $updated_at = mb_convert_encoding($row[8], 'UTF-8', 'SJIS');
             
             
             //1件ずつインポート
@@ -242,12 +244,15 @@ public function index(Request $request)
                     'item_number' => $item_number,
                     'item_amount' => $item_amount,
                     'item_img' => $item_img,
-                    'published' => $published
+                    'published' => $published,
+                    'created_at' => $created_at,
+                    'updated_at' => $updated_at,
+                    
                 ));
         }
         $row_count++;
     }
-    
+    return redirect('/');
 
     }
 }
