@@ -43,15 +43,6 @@
   　　　　　　　　　　　　　　<div class="text-danger">{{ $message }}</div>
 　　　　　　　　　　@enderror
         </div>
-                <v-combobox
-          v-model="select"
-          :items="items"
-          label=""
-          multiple
-          outlined
-          dense
-        >
-        </v-combobox>
         <!--/ item_name -->
         <div class="form-group">
            <label for="item_text">詳細情報</label>

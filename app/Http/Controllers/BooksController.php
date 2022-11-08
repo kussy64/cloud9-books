@@ -193,7 +193,18 @@ public function index(Request $request)
     }
     public function import(Request $request)
     {
-
+        $validator = Validator::make($request->all(), [
+                'item_name' => 'required|min:3|max:255',
+                'item_number' => 'required|regex:/\A([0-9]{1,})+\z/u|max:8',
+                'item_amount' => 'required|regex:/\A([0-9]{1,})+\z/u',
+                'published' => 'required',
+        ]);
+        //バリデーション:エラー 
+        if ($validator->fails()) { 
+                return redirect('/')
+                    ->withInput()
+                    ->withErrors($validator);
+        }
     //全件削除
     Book::truncate();
 

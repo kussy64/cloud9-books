@@ -19,7 +19,10 @@
             CSVインポート機能：
 <v-form action="{{ url('books/import')}}" method="POST" enctype="multipart/form-data">
      @csrf
-     <input type="file" name="csvdata" />
+     <input type="file" name="csvdata" class="form-control @error('item_name') is-invalid @enderror" value="{{ old('item_name') }}"/>
+                         @error('item_name')
+  　　　　　　　　　　　　　　<div class="text-danger">{{ $message }}</div>
+　　　　　　　　　　@enderror
                <v-btn color="primary" type="submit" class="btn btn-primary">
     CSVアップロード
     </v-btn> 
