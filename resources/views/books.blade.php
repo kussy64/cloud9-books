@@ -14,22 +14,23 @@
     <v-row justify="center">
     <v-col>
     <div class="card-body">
-        
-                        <v-card-title class="font-weight-bold">
-            CSVインポート機能：
+        <div class="card-body">
+
 <v-form action="{{ url('books/import')}}" method="POST" enctype="multipart/form-data">
      @csrf
-     <input type="file" name="csvdata" class="form-control @error('item_name') is-invalid @enderror" value="{{ old('item_name') }}"/>
-                         @error('item_name')
-  　　　　　　　　　　　　　　<div class="text-danger">{{ $message }}</div>
-　　　　　　　　　　@enderror
+     
+                                        <v-card-title class="font-weight-bold">
+            CSVインポート機能：
+            </v-card-title>   
+              <input type="file" name="csvdata"/>
                <v-btn color="primary" type="submit" class="btn btn-primary">
     CSVアップロード
     </v-btn> 
+  
                </v-form>
 
-        </v-card-title>
         
+        </div>
                 <v-card-title class="font-weight-bold">
             CSV出力機能：
 <v-form action="{{ route('books.postCsv')}}" method="GET">
