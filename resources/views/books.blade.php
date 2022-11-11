@@ -19,7 +19,7 @@
 <v-form action="{{ url('books/import')}}" method="POST" enctype="multipart/form-data">
      @csrf
      
-                                        <v-card-title class="font-weight-bold">
+            <v-card-title class="font-weight-bold">
             CSVインポート機能：
             </v-card-title>   
               <input type="file" name="csvdata"/>

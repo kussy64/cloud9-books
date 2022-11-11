@@ -170,6 +170,8 @@ public function index(Request $request)
                     'item_amount',
                     'item_img',
                     'published',
+                    'created_at',
+                    'updated_at'
                 ]);
                 // データ
                 foreach (Book::cursor() as $customer) {
@@ -181,6 +183,9 @@ public function index(Request $request)
                         $customer->item_amount,
                         $customer->item_img,
                         $customer->published,
+                        $customer->created_at,
+                        $customer->updated_at
+                        
                     ]);
                 }
                 fclose($stream);
@@ -207,7 +212,11 @@ public function index(Request $request)
     //SplFileObjectを生成
     $file = new SplFileObject($file_path);
 
-    $file->setFlags(SplFileObject::READ_CSV);
+    $file->setFlags(SplFileObject::READ_CSV |         // CSVとして行を読み込み
+            SplFileObject::READ_AHEAD |       // 先読み／巻き戻しで読み込み
+            SplFileObject::SKIP_EMPTY |       // 空行を読み飛ばす
+            SplFileObject::DROP_NEW_LINE      // 行末の改行を読み飛ばす
+            );
 
 
     $row_count = 1;
@@ -217,7 +226,11 @@ public function index(Request $request)
     {
         // 最終行の処理(最終行が空っぽの場合の対策
         if ($row === [null]) continue; 
-        
+
+        if ($row->duplicates("item_name")->count() > 0) {
+            throw new Exception("Error:idの重複：" . $row->duplicates("item_name")->shift());
+        }
+
         // 1行目のヘッダーは取り込まない
         if ($row_count > 1)
         {
