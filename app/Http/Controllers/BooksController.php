@@ -205,10 +205,12 @@ public function index(Request $request)
     // アップロードしたファイルを取得
     // 'csvdata' はビューの inputタグのname属性
     $uploaded_file = $request->file('csvdata');
-
+    if($uploaded_file === [null]){
+        return redirect('/books');
+    }else{
     // アップロードしたファイルの絶対パスを取得
     $file_path = $request->file('csvdata')->path($uploaded_file);
-
+}
     //SplFileObjectを生成
     $file = new SplFileObject($file_path);
 
@@ -262,7 +264,7 @@ public function index(Request $request)
         }
         $row_count++;
     }
-    return redirect('/');
+    return redirect('/books');
 
     }
 }
