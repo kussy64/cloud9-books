@@ -229,10 +229,7 @@ public function index(Request $request)
         // 最終行の処理(最終行が空っぽの場合の対策
         if ($row === [null]) continue; 
 
-        if ($row->duplicates("item_name")->count() > 0) {
-            throw new Exception("Error:idの重複：" . $row->duplicates("item_name")->shift());
-        }
-
+     
         // 1行目のヘッダーは取り込まない
         if ($row_count > 1)
         {
