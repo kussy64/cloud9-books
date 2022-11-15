@@ -53,6 +53,7 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css';
 
 import '@mdi/font/css/materialdesignicons.css';
 import 'material-design-icons-iconfont/dist/material-design-icons.css';
+import axios from "axios";
 
 //Vue.use(Vuetify);
 //Vue.component('example-component', require('./components/ExampleComponent.vue').default);
@@ -77,16 +78,42 @@ Vue.component('v-select', require('vue-select').default);
 new Vue({
     el: '#app',
     vuetify: new Vuetify(),
-    data: () => ({
-    items: [
-          'PHP',
-          'MySql',
-          'Laravel',
-          'HTML',
-          'JavaScript',
-          'GPS'
-    ],
-    }),
+            data: {
+                csvFile: null,
+                csvErrors: []
+            },
+            methods: {
+                onFileChange(e) {
+
+                    this.csvFile = e.target.files[0];
+
+                },
+                onSubmit() {
+
+                    this.csvErrors = [];
+
+                    const url = '/ajax/csv_import';
+                    let formData = new FormData();
+                    formData.append('csv_file', this.csvFile);
+                    axios.post(url, formData)
+                        .then(response => {
+
+                            if(response.data.result) {
+
+                                document.getElementById('file').value = '';
+                                alert('インポートが完了しました。');
+
+                            }
+
+                        })
+                        .catch(error => {
+
+                            this.csvErrors = error.response.data.errors.csv_file;
+
+                        });
+
+                }
+            },
     //router,
     iconfont: 'mdi',
     components: { HeaderComponent,ExampleComponent,DateComponent},

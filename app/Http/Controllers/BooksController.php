@@ -8,6 +8,7 @@ use App\Book;   //Bookモデルを使えるようにする
 use Validator;  //バリデーションを使えるようにする
 use Auth;       //認証モデルを使用する
 use SplFileObject;
+use Sukohi\CsvValidator\Rules\Csv;
 
 
 class BooksController extends Controller
@@ -264,5 +265,36 @@ public function index(Request $request)
     return redirect('/books');
 
     }
+        public function ajax_store(Request $request) {
+
+        $csv_rules = [
+            0 => 'required|email|unique:users,email',
+            1 => 'required|string',
+            2 => 'required|string|min:6'
+        ];
+        $request->validate([
+            'csv_file' => [
+                'required',
+                'file',
+                new Csv($csv_rules, 'sjis-win')
+            ]
+        ]);
+
+        $csv_data = $request->csv_file_data; // パッケージが作成したCSVデータ
+
+        foreach($csv_data as $row_data) {
+
+            $user = new \App\User();
+            $user->email = $row_data[0];
+            $user->name = $row_data[1];
+            $user->password = bcrypt($row_data[2]);
+            $user->save();
+
+        }
+
+        return ['result' => true];
+
+    }
+
 }
 

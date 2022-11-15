@@ -28,7 +28,15 @@
     </v-btn> 
   
                </v-form>
-
+        <label>CSVファイル</label><br>
+        <input id="file" type="file" @change="onFileChange">
+        <div v-if="csvErrors">
+            <ul>
+                <li v-for="error in csvErrors" v-text="error"></li>
+            </ul>
+        </div>
+        <br>
+        <button type="submit" @click="onSubmit">インポートする</button>
         
         </div>
                 <v-card-title class="font-weight-bold">

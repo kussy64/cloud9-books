@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "81fce7d10777245e1643e1fadcfca9e8",
+    "content-hash": "be8265278a113a9e8c517b8ea4bd9621",
     "packages": [
         {
             "name": "doctrine/inflector",
@@ -2158,6 +2158,47 @@
                 }
             ],
             "time": "2021-09-25T23:07:42+00:00"
+        },
+        {
+            "name": "sukohi/csv-validator",
+            "version": "3.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/SUKOHI/CsvValidator.git",
+                "reference": "72b020b474ddf989ead707a5fd34db2b6e576d04"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/SUKOHI/CsvValidator/zipball/72b020b474ddf989ead707a5fd34db2b6e576d04",
+                "reference": "72b020b474ddf989ead707a5fd34db2b6e576d04",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^5.7|^6.0|^7.0|^8.0",
+                "sukohi/fluent-csv": "^3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Sukohi\\CsvValidator\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sukohi",
+                    "email": "capilano.sukohi@gmail.com"
+                }
+            ],
+            "description": "A Laravel package that allows you to validate csv data.",
+            "support": {
+                "issues": "https://github.com/SUKOHI/CsvValidator/issues",
+                "source": "https://github.com/SUKOHI/CsvValidator/tree/3.0.4"
+            },
+            "time": "2020-10-02T00:32:14+00:00"
         },
         {
             "name": "sukohi/fluent-csv",

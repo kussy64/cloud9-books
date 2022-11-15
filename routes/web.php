@@ -23,6 +23,7 @@ Route::post('/booksedit/{books}','BooksController@edit');
 Route::post('/books/update','BooksController@update');
 
 //CSVアップロード
+Route::post('/', 'BooksController@ajax_store');
 Route::post('/books/import', 'BooksController@import');
 //CSVダウンロード
 Route::get('/csv', [BooksController::class, 'postCsv'])->name('books.postCsv');

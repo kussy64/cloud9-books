@@ -13,6 +13,7 @@
         "laravel/framework": "^6.20.26",
         "laravel/tinker": "^2.5",
         "phpoffice/phpspreadsheet": "^1.19",
+        "sukohi/csv-validator": "3.*",
         "sukohi/fluent-csv": "3.*"
     },
     "require-dev": {
