@@ -9,7 +9,9 @@ use Validator;  //バリデーションを使えるようにする
 use Auth;       //認証モデルを使用する
 use SplFileObject;
 use Sukohi\CsvValidator\Rules\Csv;
-
+use Goodby\CSV\Import\Standard\Lexer;
+use Goodby\CSV\Import\Standard\Interpreter;
+use Goodby\CSV\Import\Standard\LexerConfig;
 
 class BooksController extends Controller
 {
@@ -265,36 +267,66 @@ public function index(Request $request)
     return redirect('/books');
 
     }
-        public function ajax_store(Request $request) {
+  public function importCSV(Request $request)
+  {
 
-        $csv_rules = [
-            0 => 'required|email|unique:users,email',
-            1 => 'required|string',
-            2 => 'required|string|min:6'
-        ];
-        $request->validate([
-            'csv_file' => [
-                'required',
-                'file',
-                new Csv($csv_rules, 'sjis-win')
-            ]
-        ]);
+     //postで受け取ったcsvファイルデータ
+     $file = $request->file('file');
 
-        $csv_data = $request->csv_file_data; // パッケージが作成したCSVデータ
+     //Goodby CSVのconfig設定
+     $config = new LexerConfig();
+     $interpreter = new Interpreter();
+     $lexer = new Lexer($config);
 
-        foreach($csv_data as $row_data) {
+     //CharsetをUTF-8に変換
+     $config->setToCharset("UTF-8");
+     $config->setFromCharset("sjis-win");
 
-            $user = new \App\User();
-            $user->email = $row_data[0];
-            $user->name = $row_data[1];
-            $user->password = bcrypt($row_data[2]);
-            $user->save();
+     $rows = array();
+
+     $interpreter->addObserver(function(array $row) use (&$rows) {
+         $rows[] = $row;
+     });
+
+     // CSVデータをパース
+     $lexer->parse($file, $interpreter);
+
+     $data = array();
+
+     // CSVのデータを配列化
+     foreach ($rows as $key => $value) {
+
+        $arr = array();
+
+        foreach ($value as $k => $v) {
+
+            switch ($k) {
+
+        	case 0:
+        	$arr['name'] = $v;
+        	break;
+
+        	case 1:
+        	$arr['email'] = $v;
+        	break;
+
+        	default:
+        	break;
+            }
 
         }
 
-        return ['result' => true];
+        $data[] = $arr;
 
     }
+
+    // DBに一括保存
+    Sample::insert($data);
+
+    return redirect('/sample')->with('save_message', 'CSVのデータを読み込みました');
+
+  }
+
 
 }
 

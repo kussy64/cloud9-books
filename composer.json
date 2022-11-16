@@ -14,7 +14,8 @@
         "laravel/tinker": "^2.5",
         "phpoffice/phpspreadsheet": "^1.19",
         "sukohi/csv-validator": "3.*",
-        "sukohi/fluent-csv": "3.*"
+        "sukohi/fluent-csv": "3.*",
+        "goodby/csv": "*"
     },
     "require-dev": {
         "facade/ignition": "^1.16.15",
