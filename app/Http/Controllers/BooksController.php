@@ -206,8 +206,8 @@ public function index(Request $request)
     // アップロードしたファイルを取得
     // 'csvdata' はビューの inputタグのname属性
     $uploaded_file = $request->file('csvdata');
-    if($uploaded_file === [null]){
-        return redirect('/books');
+    if(is_null($uploaded_file)){
+        return redirect('/')->with('message', 'ファイルを選択してください');
     }else{
     // アップロードしたファイルの絶対パスを取得
     $file_path = $request->file('csvdata')->path($uploaded_file);
