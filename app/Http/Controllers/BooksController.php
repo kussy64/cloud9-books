@@ -344,16 +344,16 @@ public function index(Request $request)
             }
 
         }
-        //　バリデーション処理
+        /*　バリデーション処理
         $validator = Validator::make($arr,[
            'item_name' => 'required|string|max:255',
            'item_text' => 'required|string|max:255'
         ]);
 
         if ($validator->fails()) {
-           $validator->errors()->add('line', $key);
            return redirect('/')->withErrors($validator)->withInput();
         }
+        */
         $data[] = $arr;
 
     }
