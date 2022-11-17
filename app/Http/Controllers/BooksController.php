@@ -271,7 +271,7 @@ public function index(Request $request)
   {
 
      //postで受け取ったcsvファイルデータ
-     $file = $request->file('file');
+     $file = $request->file('csvdata');
 
      //Goodby CSVのconfig設定
      $config = new LexerConfig();
@@ -303,27 +303,65 @@ public function index(Request $request)
             switch ($k) {
 
         	case 0:
-        	$arr['name'] = $v;
+        	$arr['user_id'] = $v;
+        	break;
+        	
+        	case 1:
+        	$arr['item_name'] = $v;
         	break;
 
-        	case 1:
-        	$arr['email'] = $v;
+        	case 2:
+        	$arr['item_text'] = $v;
         	break;
+        	
+        	case 3:
+        	$arr['item_number'] = $v;
+        	break;
+        	
+        	case 4:
+        	$arr['item_amount'] = $v;
+        	break;
+        	
+        	case 5:
+        	$arr['item_img'] = $v;
+        	break;
+        	
+        	case 6:
+        	$arr['published'] = $v;
+        	break;
+        	
+        	case 7:
+        	$arr['created_at'] = $v;
+        	break;
+        	
+        	case 8:
+        	$arr['updated_at'] = $v;
+        	break;
+        	
 
         	default:
         	break;
             }
 
         }
+        //　バリデーション処理
+        $validator = Validator::make($arr,[
+           'item_name' => 'required|string|max:255',
+           'item_text' => 'required|string|max:255'
+        ]);
 
+        if ($validator->fails()) {
+           $validator->errors()->add('line', $key);
+           return redirect('/')->withErrors($validator)->withInput();
+        }
         $data[] = $arr;
 
     }
 
     // DBに一括保存
-    Sample::insert($data);
+    Book::insert($data);
 
-    return redirect('/sample')->with('save_message', 'CSVのデータを読み込みました');
+    return redirect('/')->with('save_message', 'CSVのデータを読み込みました');
 
   }
 
