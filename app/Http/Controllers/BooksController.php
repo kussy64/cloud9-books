@@ -180,7 +180,7 @@ public function index(Request $request)
                 foreach (Book::cursor() as $customer) {
                     fputcsv($stream, [
                         $customer->user_id,
-                        $customer->item_name, 
+                        $customer->item_name,
                         $customer->item_text,
                         $customer->item_number,
                         $customer->item_amount,
@@ -199,74 +199,7 @@ public function index(Request $request)
             ]
         );
     }
-    public function import(Request $request)
-    {
-        
-    // ロケールを設定(日本語に設定)
-    setlocale(LC_ALL, 'ja_JP.UTF-8');
 
-    // アップロードしたファイルを取得
-    // 'csvdata' はビューの inputタグのname属性
-    $uploaded_file = $request->file('csvdata');
-    if(is_null($uploaded_file)){
-        return redirect('/')->with('message', 'ファイルを選択してください');
-    }else{
-    // アップロードしたファイルの絶対パスを取得
-    $file_path = $request->file('csvdata')->path($uploaded_file);
-}
-    //SplFileObjectを生成
-    $file = new SplFileObject($file_path);
-
-    $file->setFlags(SplFileObject::READ_CSV |         // CSVとして行を読み込み
-            SplFileObject::READ_AHEAD |       // 先読み／巻き戻しで読み込み
-            SplFileObject::SKIP_EMPTY |       // 空行を読み飛ばす
-            SplFileObject::DROP_NEW_LINE      // 行末の改行を読み飛ばす
-            );
-
-
-    $row_count = 1;
-    
-    //取得したオブジェクトを読み込み
-    foreach ($file as $row)
-    {
-        // 最終行の処理(最終行が空っぽの場合の対策
-        if ($row === [null]) continue; 
-
-     
-        // 1行目のヘッダーは取り込まない
-        if ($row_count > 1)
-        {
-            // CSVの文字コードがSJISなのでUTF-8に変更
-            $user_id = mb_convert_encoding($row[0], 'UTF-8', 'SJIS');
-            $item_name = mb_convert_encoding($row[1], 'UTF-8', 'SJIS');
-            $item_text = mb_convert_encoding($row[2], 'UTF-8', 'SJIS');
-            $item_number = mb_convert_encoding($row[3], 'UTF-8', 'SJIS');
-            $item_amount = mb_convert_encoding($row[4], 'UTF-8', 'SJIS');
-            $item_img = mb_convert_encoding($row[5], 'UTF-8', 'SJIS');
-            $published = mb_convert_encoding($row[6], 'UTF-8', 'SJIS');
-            $created_at = mb_convert_encoding($row[7], 'UTF-8', 'SJIS');
-            $updated_at = mb_convert_encoding($row[8], 'UTF-8', 'SJIS');
-            
-            
-            //1件ずつインポート
-                Book::insert(array(
-                    'user_id' => $user_id, 
-                    'item_name' => $item_name, 
-                    'item_text' => $item_text,
-                    'item_number' => $item_number,
-                    'item_amount' => $item_amount,
-                    'item_img' => $item_img,
-                    'published' => $published,
-                    'created_at' => $created_at,
-                    'updated_at' => $updated_at,
-                    
-                ));
-        }
-        $row_count++;
-    }
-    return redirect('/books');
-
-    }
   public function importCSV(Request $request)
   {
 
@@ -348,8 +281,7 @@ public function index(Request $request)
         }
         //　バリデーション処理
         $validator = Validator::make($arr,[
-           'item_name' => 'required|string|max:255',
-           'item_text' => 'required|string|max:255'
+           'item_name' => 'required|min:3|max:255',
         ]);
 
         if ($validator->fails()) {
