@@ -272,7 +272,9 @@ public function index(Request $request)
 
      //postで受け取ったcsvファイルデータ
      $file = $request->file('csvdata');
-
+    if(is_null($file)){
+        return redirect('/')->with('message', 'ファイルを選択してください');
+    }
      //Goodby CSVのconfig設定
      $config = new LexerConfig();
      $interpreter = new Interpreter();
@@ -344,7 +346,7 @@ public function index(Request $request)
             }
 
         }
-        /*　バリデーション処理
+        //　バリデーション処理
         $validator = Validator::make($arr,[
            'item_name' => 'required|string|max:255',
            'item_text' => 'required|string|max:255'
@@ -353,7 +355,6 @@ public function index(Request $request)
         if ($validator->fails()) {
            return redirect('/')->withErrors($validator)->withInput();
         }
-        */
         $data[] = $arr;
 
     }
