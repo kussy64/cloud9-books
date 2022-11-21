@@ -216,8 +216,10 @@ public function index(Request $request)
      //CharsetをUTF-8に変換
      $config->setToCharset("UTF-8");
      $config->setFromCharset("sjis-win");
+     $config->setIgnoreHeaderLine(true);
 
      $rows = array();
+     
 
      $interpreter->addObserver(function(array $row) use (&$rows) {
          $rows[] = $row;
@@ -227,12 +229,13 @@ public function index(Request $request)
      $lexer->parse($file, $interpreter);
 
      $data = array();
+     
 
      // CSVのデータを配列化
      foreach ($rows as $key => $value) {
 
         $arr = array();
-
+        
         foreach ($value as $k => $v) {
 
             switch ($k) {
@@ -265,13 +268,7 @@ public function index(Request $request)
         	$arr['published'] = $v;
         	break;
         	
-        	case 7:
-        	$arr['created_at'] = $v;
-        	break;
-        	
-        	case 8:
-        	$arr['updated_at'] = $v;
-        	break;
+
         	
 
         	default:
@@ -279,14 +276,17 @@ public function index(Request $request)
             }
 
         }
-        //　バリデーション処理
+        //dd($arr);
+                        //　バリデーション処理
         $validator = Validator::make($arr,[
            'item_name' => 'required|min:3|max:255',
+           'item_text' => 'required|min:3|max:255'
         ]);
 
         if ($validator->fails()) {
            return redirect('/')->withErrors($validator)->withInput();
         }
+
         $data[] = $arr;
 
     }
@@ -297,7 +297,61 @@ public function index(Request $request)
     return redirect('/')->with('save_message', 'CSVのデータを読み込みました');
 
   }
+    public function import(Request $request)
+    {
 
+    // ロケールを設定(日本語に設定)
+    setlocale(LC_ALL, 'ja_JP.UTF-8');
+
+    // アップロードしたファイルを取得
+    // 'csv_file' はビューの inputタグのname属性
+    $uploaded_file = $request->file('csvdata');
+
+    // アップロードしたファイルの絶対パスを取得
+    $file_path = $request->file('csvdata')->path($uploaded_file);
+
+    //SplFileObjectを生成
+    $file = new SplFileObject($file_path);
+
+    //SplFileObject::READ_CSV が最速らしい
+    $file->setFlags(SplFileObject::READ_CSV);
+
+
+    $row_count = 1;
+    
+    //取得したオブジェクトを読み込み
+    foreach ($file as $row)
+    {
+        // 最終行の処理(最終行が空っぽの場合の対策
+        if ($row === [null]) continue; 
+        
+        // 1行目のヘッダーは取り込まない
+        if ($row_count > 1)
+        {
+            // CSVの文字コードがSJISなのでUTF-8に変更
+            $item_name = mb_convert_encoding($row[0], 'UTF-8', 'SJIS');
+            $item_text = mb_convert_encoding($row[1], 'UTF-8', 'SJIS');
+            $item_number = mb_convert_encoding($row[2], 'UTF-8', 'SJIS');
+            $item_amount = mb_convert_encoding($row[3], 'UTF-8', 'SJIS');
+            $item_img = mb_convert_encoding($row[4], 'UTF-8', 'SJIS');
+            $published = mb_convert_encoding($row[5], 'UTF-8', 'SJIS');
+            
+            //1件ずつインポート
+                CSVimport::insert(array(
+                    'item_name' => $item_name, 
+                    'item_text' => $item_text, 
+                    'item_number' => $item_number, 
+                    'item_amount' => $item_amount,
+                    'item_img' => $item_img,
+                    'published' => $published
+                ));
+        }
+        $row_count++;
+    }
+    
+    return view('welcome');
+
+    }
 
 }
 
