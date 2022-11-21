@@ -280,7 +280,7 @@ public function index(Request $request)
                         //　バリデーション処理
         $validator = Validator::make($arr,[
            'item_name' => 'unique:books|required|min:3|max:255',
-           'item_text' => 'required|min:3|max:255'
+           'item_text' => 'unique:books|required|min:3|max:255'
         ]);
 
         if ($validator->fails()) {
