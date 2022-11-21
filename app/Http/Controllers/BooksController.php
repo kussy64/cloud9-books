@@ -279,7 +279,7 @@ public function index(Request $request)
         //dd($arr);
                         //　バリデーション処理
         $validator = Validator::make($arr,[
-           'item_name' => 'required|min:3|max:255',
+           'item_name' => 'unique:books|required|min:3|max:255',
            'item_text' => 'required|min:3|max:255'
         ]);
 
