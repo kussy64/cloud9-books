@@ -220,7 +220,6 @@ public function index(Request $request)
 
      $rows = array();
      
-
      $interpreter->addObserver(function(array $row) use (&$rows) {
          $rows[] = $row;
      });
