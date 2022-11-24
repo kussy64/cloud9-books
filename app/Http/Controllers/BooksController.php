@@ -292,7 +292,10 @@ public function index(Request $request)
         
 
         $data[] = $arr;
-
+        
+        for($i = 0; $i < count($validator); $i++) {
+    
+}
     }
 $count++;
     // DBに一括保存
