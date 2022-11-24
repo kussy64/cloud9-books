@@ -231,6 +231,7 @@ public function index(Request $request)
      
 
      // CSVのデータを配列化
+     $count = 0;
      foreach ($rows as $key => $value) {
 
         $arr = array();
@@ -286,17 +287,18 @@ public function index(Request $request)
         ]);
 
         if ($validator->fails()) {
-           return redirect('/')->withErrors($validator)->withInput();
+           return redirect('/')->withErrors($validator)->withInput()->with('message', $count . '件の項目を読み込みました');
         }
+        
 
         $data[] = $arr;
 
     }
-
+$count++;
     // DBに一括保存
     Book::insert($data);
 
-    return redirect('/')->with('save_message', 'CSVのデータを読み込みました');
+    return redirect('/')->with('message', $count . 'CSVのデータを読み込みました');
 
   }
     public function import(Request $request)
