@@ -285,7 +285,7 @@ public function index(Request $request)
            'item_amount' => 'required',
            'published' => 'required'
         ]);
-
+$count++;
         if ($validator->fails()) {
            return redirect('/')->withErrors($validator)->withInput()->with('message', $count . '件の項目を読み込みました');
         }
