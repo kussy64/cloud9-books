@@ -288,7 +288,7 @@ public function index(Request $request)
 
         if ($validator->fails()) {
            
-           return redirect('/')->withErrors($validator)->withInput()->with('message', $count . '件の項目を読み込みました');
+           return redirect('/')->withErrors($validator)->withInput()->with('message','件の項目を読み込みました');
         }
         
 
