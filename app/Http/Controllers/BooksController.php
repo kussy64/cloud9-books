@@ -231,11 +231,11 @@ public function index(Request $request)
      
 
      // CSVのデータを配列化
-     $count = 0;
+     
      foreach ($rows as $key => $value) {
 
         $arr = array();
-        
+        $count = 0;
         foreach ($value as $k => $v) {
 
             switch ($k) {
@@ -276,7 +276,7 @@ public function index(Request $request)
             }
 
         }
-        //dd($arr);
+     $count++;
                         //　バリデーション処理
         $validator = Validator::make($arr,[
            'item_name' => 'unique:books|required|min:3|max:255',
@@ -285,19 +285,18 @@ public function index(Request $request)
            'item_amount' => 'required',
            'published' => 'required'
         ]);
-$count++;
+
         if ($validator->fails()) {
+           
            return redirect('/')->withErrors($validator)->withInput()->with('message', $count . '件の項目を読み込みました');
         }
         
 
         $data[] = $arr;
         
-        for($i = 0; $i < count($validator); $i++) {
-    
-}
+
     }
-$count++;
+
     // DBに一括保存
     Book::insert($data);
 
