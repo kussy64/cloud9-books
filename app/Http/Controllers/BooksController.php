@@ -199,67 +199,80 @@ public function index(Request $request)
             ]
         );
     }
-
+//公開　関数　importCSV(受け取った要求)
   public function importCSV(Request $request)
   {
 
      //postで受け取ったcsvファイルデータ
+     //$file = 受け取った要求->file（'CSVアップロード時の渡されたデータ'）
      $file = $request->file('csvdata');
+     //もし($fileにデータが渡されていなかったら)
     if(is_null($file)){
+        //／の画面にもどる->とともに(message,ファイルを選択してください)；
         return redirect('/')->with('message', 'ファイルを選択してください');
     }
      //Goodby CSVのconfig設定
+     //設定値 = 新しい 語彙設定();
      $config = new LexerConfig();
+     //通訳者 = 新しい 通訳者();
      $interpreter = new Interpreter();
+     //語彙 = 新しい 語彙(設定値);
      $lexer = new Lexer($config);
 
      //CharsetをUTF-8に変換
      $config->setToCharset("UTF-8");
+     //設定値->設定された文字セット("UTF-8");
      $config->setFromCharset("sjis-win");
+     //設定値->文字セットから設定("sjis-win")
      $config->setIgnoreHeaderLine(true);
-
+     //設定値->設定されたヘッダー行を無視する(true);
+     //列 = 配列
      $rows = array();
-     
+     //通訳者->オブザーバーを追加する(関数(配列　列) 使う(&列)
      $interpreter->addObserver(function(array $row) use (&$rows) {
+         //配列[] = 列
          $rows[] = $row;
      });
 
      // CSVデータをパース
+     //語彙->解析($file,通訳者);
      $lexer->parse($file, $interpreter);
-
+     //データ = 配列();
      $data = array();
      
 
      // CSVのデータを配列化
-     
+     //foreach(列 as 変数key => 変数value)
      foreach ($rows as $key => $value) {
-
+        //変数 = 配列();
         $arr = array();
+        //カウント = 0;
         $count = 0;
+        //foreach(変数value as 変数k => 変数v)
         foreach ($value as $k => $v) {
-
+            //switch (変数k)
             switch ($k) {
-
+            //0ならuser_idに値$vを入れる
         	case 0:
         	$arr['user_id'] = $v;
         	break;
-        	
+        	//1ならitem_textに値$vを入れる
         	case 1:
         	$arr['item_name'] = $v;
         	break;
-
+        	//2ならitem_textに値$vを入れる
         	case 2:
         	$arr['item_text'] = $v;
         	break;
-        	
+        	//3ならitem_numberに値$vを入れる
         	case 3:
         	$arr['item_number'] = $v;
         	break;
-        	
+        	//4ならitem_amountに値$vを入れる
         	case 4:
         	$arr['item_amount'] = $v;
         	break;
-        	
+        	//5ならitem_imgに値$vを入れる
         	case 5:
         	$arr['item_img'] = $v;
         	break;
@@ -279,19 +292,24 @@ public function index(Request $request)
      $count++;
                         //　バリデーション処理
         $validator = Validator::make($arr,[
+            //item_nameがDBのbooksテーブルに既に存在しているのか、空欄ではないか、3文字以下、255文字を超えていないか確認
            'item_name' => 'unique:books|required|min:3|max:255',
+           //item_textがDBのbooksテーブルに既に存在しているのか、空欄ではないか、3文字以下、255文字を超えていないか確認
            'item_text' => 'unique:books|required|min:3|max:255',
+           //user_idが空欄ではないか
            'user_id' => 'required',
+           //item_amountが空欄ではないか
            'item_amount' => 'required',
+           //publishedが空欄ではないか
            'published' => 'required'
         ]);
-
+        //もしバリデーションが失敗したら
         if ($validator->fails()) {
-           
-           return redirect('/')->withErrors($validator)->withInput()->with('message','件の項目を読み込みました');
+           //／の画面に行きバリデーションメッセージを出す
+           return redirect('/')->withErrors($validator)->withInput()->with('message', $count . '件の項目を読み込みました');
         }
         
-
+        //dataに変数$arrを入れる
         $data[] = $arr;
         
 
@@ -299,7 +317,8 @@ public function index(Request $request)
 
     // DBに一括保存
     Book::insert($data);
-
+    //dataの内容をDBにインサート
+    //／の画面に戻りCSVのデータを読み込みましたと表示
     return redirect('/')->with('message', $count . 'CSVのデータを読み込みました');
 
   }

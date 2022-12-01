@@ -63,17 +63,9 @@
           {{ session('message') }}
       </div>
   @endif
-  @if (count($errors) > 0)
-        <div class="errormessagebox">
-              <ul>
-                  
-                   @foreach ($errors->all() as $error) 
-                        <li>{{  $error }}</li>
-                   @endforeach
-              </ul>
-          </div>
-    @endif
-
+  
+  
+  
       <v-row justify="center">
            
         
