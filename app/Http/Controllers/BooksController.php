@@ -290,6 +290,20 @@ public function index(Request $request)
 
         }
      $count++;
+        foreach ($rows as $line_num => $line) {
+            if (0 === $line_num || 1 === count($line)) {
+                // 最初の行または空行など余分な空白がCSVの途中に混ざっている場合は無視
+                continue;
+            }
+            if (count($line) !== count(config('const.CSV_HEADER_NUM'))) {
+                $csv_errors = array_merge($csv_errors, ['Line '.$line_num.' カラム数が不正です']);
+            }
+            // 入力値バリデーション
+            $validator = Validator::make($line, $rules, $this->makeCsvValidationMessages($line_num));
+            if ($validator->fails()) {
+                $csv_errors = array_merge($csv_errors, $validator->errors()->all());
+                continue;
+            }
                         //　バリデーション処理
         //$validator = Validator::make($arr,[
             //item_nameがDBのbooksテーブルに既に存在しているのか、空欄ではないか、3文字以下、255文字を超えていないか確認
@@ -327,3 +341,4 @@ public function index(Request $request)
 
 }
 
+}
