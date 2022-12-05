@@ -304,12 +304,16 @@ public function index(Request $request)
 
         }
      $count++;
+             $rules = $this->makeCsvValidationRules();
+        $csv_errors = [];
+        $csv_id_list = [];
+        $csv_email_list = [];
         foreach ($rows as $line_num => $line) {
             if (0 === $line_num || 1 === count($line)) {
                 // 最初の行または空行など余分な空白がCSVの途中に混ざっている場合は無視
                 continue;
             }
-            if (isset($line) !== count(config('const.CSV_HEADER_NUM'))) {
+            if (isset($line)) {
                 $csv_errors = array_merge($csv_errors, ['Line '.$line_num.' カラム数が不正です']);
             }
             // 入力値バリデーション
@@ -354,5 +358,34 @@ public function index(Request $request)
 
 
 }
+    private function makeCsvValidationRules()
+    {
+        $rules = [];
+        foreach (config('const.CSV_HEADER_NUM') as $val) {
+            switch ($val['INDEX']) {
+                case config('const.CSV_HEADER_NUM.TYPE.INDEX'):
+                    $rules[$val['INDEX']] = 'required|in:'.implode(config('const.CSV_TYPE'), ',');
+                    break;
+                case config('const.CSV_HEADER_NUM.ID.INDEX'):
+                    $rules[$val['INDEX']] = 'nullable|numeric|digits_between:0,10';
+                    break;
+                case config('const.CSV_HEADER_NUM.NAME.INDEX'):
+                    $rules[$val['INDEX']] = 'required|regex:/^[a-zA-Z]+$/|max:255';
+                    break;
+                case config('const.CSV_HEADER_NUM.EMAIL.INDEX'):
+                    $rules[$val['INDEX']] = 'nullable|email|max:255';
+                    break;
+                case config('const.CSV_HEADER_NUM.PASSWORD.INDEX'):
+                    $rules[$val['INDEX']] = 'nullable|regex:/^[0-9a-zA-Z]+$/|between:8,16';
+                    break;
+                case config('const.CSV_HEADER_NUM.AGE.INDEX'):
+                    $rules[$val['INDEX']] = 'nullable|numeric|digits_between:0,2';
+                    break;
+                default:
+                    break;
+            }
+        }
+        return $rules;
+    }
 
 }
