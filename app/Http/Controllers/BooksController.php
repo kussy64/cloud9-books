@@ -199,6 +199,20 @@ public function index(Request $request)
             ]
         );
     }
+    
+        public function rules()
+    {
+        return [
+            'csv_file' => [
+                'required',
+                'max:1024', // php.iniのupload_max_filesizeとpost_max_sizeを考慮する必要があるので注意
+                'file',
+                'mimes:csv,txt', // mimesの都合上text/csvなのでtxtも許可が必要
+                'mimetypes:text/plain',
+            ],
+        ];
+    }
+    
 //公開　関数　importCSV(受け取った要求)
   public function importCSV(Request $request)
   {
@@ -295,7 +309,7 @@ public function index(Request $request)
                 // 最初の行または空行など余分な空白がCSVの途中に混ざっている場合は無視
                 continue;
             }
-            if (count($line) !== count(config('const.CSV_HEADER_NUM'))) {
+            if (isset($line) !== count(config('const.CSV_HEADER_NUM'))) {
                 $csv_errors = array_merge($csv_errors, ['Line '.$line_num.' カラム数が不正です']);
             }
             // 入力値バリデーション
@@ -335,7 +349,7 @@ public function index(Request $request)
     //／の画面に戻りCSVのデータを読み込みましたと表示
     return redirect('/')->with('message', $count . 'CSVのデータを読み込みました');
 
-  }
+     }
 
 
 
