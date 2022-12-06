@@ -10,12 +10,12 @@
     "require": {
         "php": "^7.2.5|^8.0",
         "fideloper/proxy": "^4.4",
+        "goodby/csv": "*",
         "laravel/framework": "^6.20.26",
         "laravel/tinker": "^2.5",
         "phpoffice/phpspreadsheet": "^1.19",
         "sukohi/csv-validator": "3.*",
-        "sukohi/fluent-csv": "3.*",
-        "goodby/csv": "*"
+        "sukohi/fluent-csv": "3.*"
     },
     "require-dev": {
         "facade/ignition": "^1.16.15",
