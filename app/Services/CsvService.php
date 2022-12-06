@@ -82,22 +82,6 @@ class CsvService
         return $this->user->updateUser($id, $data);
     }
 
-    /**
-     * CSV削除処理
-     *
-     * @param $id
-     * @param $data
-     */
-    public function deleteCsvData($id, $data)
-    {
-        // 退会に更新する際は、配列から必要なデータのみ抜粋
-        $update_data = [
-            'status' => $data['status'],
-            'updated_at' => $data['updated_at'],
-        ];
-
-        return $this->user->updateUser($id, $update_data);
-    }
 
     /**
      * CSVファイル内のバリデーション
@@ -109,6 +93,7 @@ class CsvService
     public function validateCsvData($file)
     {
         // CSVファイルがヘッダー行を除いて最大行以上の場合はエラー
+        
         $file->seek($file->getSize());
         $total = $file->key() - 1;
         if (1 > $total) {
