@@ -16,7 +16,7 @@
     <div class="card-body">
         <div class="card-body">
 
-<v-form action="{{ url('books/importCSV')}}" method="POST" enctype="multipart/form-data">
+<v-form action="{{ url('books/ajax_store')}}" method="POST" enctype="multipart/form-data">
      @csrf
      
             <v-card-title class="font-weight-bold">

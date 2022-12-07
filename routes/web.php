@@ -24,7 +24,7 @@ Route::post('/books/update','BooksController@update');
 
 //CSVアップロード
 
-Route::post('ajax/csv_import', 'BooksController@ajax_store');
+Route::post('books/ajax_store', 'BooksController@ajax_store');
 //CSVダウンロード
 Route::get('/csv', [BooksController::class, 'postCsv'])->name('books.postCsv');
 
