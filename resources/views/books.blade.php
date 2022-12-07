@@ -22,7 +22,7 @@
             <v-card-title class="font-weight-bold">
             CSVインポート機能：
             </v-card-title>   
-              <input type="file" name="csvdata" @change="onFileChange"/>
+              <input id="file" type="file" name="csvdata" @change="onFileChange"/>
         <div v-if="csvErrors">
             <ul>
                 <li v-for="error in csvErrors" v-text="error"></li>

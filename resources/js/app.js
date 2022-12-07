@@ -92,7 +92,7 @@ new Vue({
 
                     this.csvErrors = [];
 
-                    const url = '/ajax/csv_import';
+                    const url = '/books/ajax_store';
                     let formData = new FormData();
                     formData.append('csv_file', this.csvFile);
                     axios.post(url, formData)
