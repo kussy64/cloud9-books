@@ -16,19 +16,14 @@
     <div class="card-body">
         <div class="card-body">
 
-<v-form action="{{ url('books/ajax_store')}}" method="POST" enctype="multipart/form-data">
+<v-form action="{{ url('books/importCSV')}}" method="POST" enctype="multipart/form-data">
      @csrf
      
             <v-card-title class="font-weight-bold">
             CSVインポート機能：
             </v-card-title>   
-              <input id="file" type="file" name="csvdata" @change="onFileChange"/>
-        <div v-if="csvErrors">
-            <ul>
-                <li v-for="error in csvErrors" v-text="error"></li>
-            </ul>
-        </div>
-               <v-btn color="primary" type="submit" class="btn btn-primary" >
+              <input type="file" name="csvdata" />
+               <v-btn color="primary" type="submit" class="btn btn-primary">
     CSVアップロード
     </v-btn> 
   

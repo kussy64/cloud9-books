@@ -304,37 +304,20 @@ public function index(Request $request)
 
         }
      $count++;
-             $rules = $this->makeCsvValidationRules();
-        $csv_errors = [];
-        $csv_id_list = [];
-        $csv_email_list = [];
-        foreach ($rows as $line_num => $line) {
-            if (0 === $line_num || 1 === count($line)) {
-                // 最初の行または空行など余分な空白がCSVの途中に混ざっている場合は無視
-                continue;
-            }
-            if (isset($line)) {
-                $csv_errors = array_merge($csv_errors, ['Line '.$line_num.' カラム数が不正です']);
-            }
-            // 入力値バリデーション
-            $validator = Validator::make($line, $rules, $this->makeCsvValidationMessages($line_num));
-            if ($validator->fails()) {
-                $csv_errors = array_merge($csv_errors, $validator->errors()->all());
-                continue;
-            }
+
                         //　バリデーション処理
-        //$validator = Validator::make($arr,[
+        $validator = Validator::make($arr,[
             //item_nameがDBのbooksテーブルに既に存在しているのか、空欄ではないか、3文字以下、255文字を超えていないか確認
-          // 'item_name' => 'unique:books|required|min:3|max:255',
+           'item_name' => 'unique:books,item_name|required|min:3|max:255',
            //item_textがDBのbooksテーブルに既に存在しているのか、空欄ではないか、3文字以下、255文字を超えていないか確認
-          // 'item_text' => 'unique:books|required|min:3|max:255',
+          'item_text' => 'unique:books|required|min:3|max:255',
            //user_idが空欄ではないか
-           //'user_id' => 'required',
+           'user_id' => 'required',
            //item_amountが空欄ではないか
-          // 'item_amount' => 'required',
+          'item_amount' => 'required',
            //publishedが空欄ではないか
-          // 'published' => 'required'
-        //]);
+          'published' => 'required'
+        ]);
         //もしバリデーションが失敗したら
         if ($validator->fails()) {
            //／の画面に行きバリデーションメッセージを出す
@@ -357,14 +340,16 @@ public function index(Request $request)
 
 
 
-}
+
+
 
     public function ajax_store(Request $request) {
 
         $csv_rules = [
-            0 => 'required|email|unique:users,email',
+            0 => 'unique:books,item_name|required|min:3|max:255',
             1 => 'required|string',
             2 => 'required|string|min:6'
+            
         ];
         $request->validate([
             'csv_file' => [

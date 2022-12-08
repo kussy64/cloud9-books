@@ -45,5 +45,49 @@
           
 </v-app>
 </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+    <script>
+
+        new Vue({
+            el: '#app',
+            data: {
+                csvFile: null,
+                csvErrors: []
+            },
+            methods: {
+                onFileChange(e) {
+
+                    this.csvFile = e.target.files[0];
+
+                },
+                onSubmit() {
+
+                    this.csvErrors = [];
+
+                    const url = '/ajax/csv_import';
+                    let formData = new FormData();
+                    formData.append('csv_file', this.csvFile);
+                    axios.post(url, formData)
+                        .then(response => {
+
+                            if(response.data.result) {
+
+                                document.getElementById('file').value = '';
+                                alert('インポートが完了しました。');
+
+                            }
+
+                        })
+                        .catch(error => {
+
+                            this.csvErrors = error.response.data.errors.csv_file;
+
+                        });
+
+                }
+            }
+        });
+
+    </script>
 </body>
 </html>
