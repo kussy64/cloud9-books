@@ -328,7 +328,7 @@ public function index(Request $request)
         
         if ($validator->fails()) {
            //／の画面に行きバリデーションメッセージを出す
-           return redirect('/')->withErrors($validator)->withInput()->with('message', $count . '件の項目を読み込みました');
+           return redirect('/')->withErrors($validator)->withInput()->with('message', $error_list . '件の項目を読み込みました');
         }
         
         //dataに変数$arrを入れる
