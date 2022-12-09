@@ -319,6 +319,13 @@ public function index(Request $request)
           'published' => 'required'
         ]);
         //もしバリデーションが失敗したら
+            if ($validator->fails() === true) {
+                $error_list[$count] = $validator->errors()->all();
+            }
+
+            $count++;
+        
+        
         if ($validator->fails()) {
            //／の画面に行きバリデーションメッセージを出す
            return redirect('/')->withErrors($validator)->withInput()->with('message', $count . '件の項目を読み込みました');
@@ -376,64 +383,6 @@ public function index(Request $request)
     }
 
 
-    public function import(CsvRequest $request)
-    {
-        $path = env('DOCUMENT_ROOT').'/crud/storage/app/';
-
-        // ファイル名を現在時刻で設定
-        $filename = 'csv_import_'.date('YmdHis').'.csv';
-
-        // 一時領域保存場所にCSVファイルを配置
-        $path .= $request->file('csv_file')->storeAs('csv', $filename);
-
-        // CSV読み込み
-        $file = new SplFileObject($path);
-        $file->setFlags(SplFileObject::READ_CSV);
-
-        // CSVの中身に対するバリデーションを実施
-        $csv_errors = $this->csv->validateCsvData($file);
-        if (count($csv_errors) >= 1) {
-            $file = null;
-            unlink($path);
-            return redirect()->route('csv.index')->withInput(['csv_errors' => $csv_errors]);
-        }
-
-        // 登録、編集、削除ごとに配列整形
-        $records = $this->csv->makeCsvRecords($file);
-
-        // 配列整形後は不要なのでファイル削除
-        $file = null;
-        unlink($path);
-
-        DB::beginTransaction();
-        try {
-            // 登録
-            if (isset($records[config('const.CSV_TYPE.REGISTER')])) {
-                $this->csv->createCsvData($records[config('const.CSV_TYPE.REGISTER')]);
-            }
-
-            // 編集
-            if (isset($records[config('const.CSV_TYPE.EDIT')])) {
-                foreach ($records[config('const.CSV_TYPE.EDIT')] as $update_val) {
-                    $this->csv->updateCsvData($update_val['id'], $update_val);
-                }
-            }
-
-            // 削除
-            if (isset($records[config('const.CSV_TYPE.DELETE')])) {
-                foreach ($records[config('const.CSV_TYPE.DELETE')] as $delete_val) {
-                    $this->csv->deleteCsvData($delete_val['id'], $delete_val);
-                }
-            }
-        } catch(\Exception $e) {
-            DB::rollback();
-            Log::error('アップロードしたCSVのデータの登録・編集・削除中に例外が発生しました:'.$e->getMessage());
-            abort(500);
-        }
-        DB::commit();
-
-        return redirect()->route('user.list');
-    }
 
     private function makeCsvValidationRules()
     {
