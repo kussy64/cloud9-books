@@ -19,6 +19,7 @@ class Book extends Model
         $list = [
             'item_name' => "書籍名",
             'item_text'    => "詳細情報",
+            'item_amount' => "金額",
         ];
 
         foreach ($list as $key => $value) {

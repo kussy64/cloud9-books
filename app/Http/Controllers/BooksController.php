@@ -384,37 +384,12 @@ public function index(Request $request)
 
     }
 
-
-
-    private function makeCsvValidationRules()
-    {
-        $rules = [];
-        foreach (config('const.CSV_HEADER_NUM') as $val) {
-            switch ($val['INDEX']) {
-                case config('const.CSV_HEADER_NUM.TYPE.INDEX'):
-                    $rules[$val['INDEX']] = 'required|in:'.implode(config('const.CSV_TYPE'), ',');
-                    break;
-                case config('const.CSV_HEADER_NUM.ID.INDEX'):
-                    $rules[$val['INDEX']] = 'nullable|numeric|digits_between:0,10';
-                    break;
-                case config('const.CSV_HEADER_NUM.NAME.INDEX'):
-                    $rules[$val['INDEX']] = 'required|regex:/^[a-zA-Z]+$/|max:255';
-                    break;
-                case config('const.CSV_HEADER_NUM.EMAIL.INDEX'):
-                    $rules[$val['INDEX']] = 'nullable|email|max:255';
-                    break;
-                case config('const.CSV_HEADER_NUM.PASSWORD.INDEX'):
-                    $rules[$val['INDEX']] = 'nullable|regex:/^[0-9a-zA-Z]+$/|between:8,16';
-                    break;
-                case config('const.CSV_HEADER_NUM.AGE.INDEX'):
-                    $rules[$val['INDEX']] = 'nullable|numeric|digits_between:0,2';
-                    break;
-                default:
-                    break;
+            if (!is_null($sample)) {
+                $csv_errors[$key][] = $number . ' は登録済みのNoです。';
+ 
+            } elseif ($number_count[$number] > 1) {
+                $csv_errors[$key][] = 'No ' . $number . ' はcsvファイル内で重複しています。';
             }
-        }
-        return $rules;
-    }
     
      //・公開関数 stores(Request $request)
     public function stores(Request $request)
@@ -586,5 +561,7 @@ public function index(Request $request)
             'content.required' => '内容を入力してください。',
         ];
     }
+    
+    
 }
 
