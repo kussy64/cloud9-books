@@ -326,11 +326,11 @@ public function index(Request $request)
             }
 
             $count++;
+            $conversion = implode($error_list[$count]);
         
-        
-        if (count($error_list) > 0) {
+        if (count($conversion) > 0) {
            //／の画面に行きバリデーションメッセージを出す
-           return redirect('/')->withErrors($validator)->withInput()->with($error_list . '件の項目を読み込みました');
+           return redirect('/')->withErrors($validator)->withInput()->with($conversion . '件の項目を読み込みました');
         }
         
         //dataに変数$arrを入れる

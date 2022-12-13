@@ -17,8 +17,8 @@ class Book extends Model
     {
         // CSVヘッダとテーブルのカラムを関連付けておく
         $list = [
-            'content' => "内容",
-            'memo'    => "備考",
+            'item_name' => "書籍名",
+            'item_text'    => "詳細情報",
         ];
 
         foreach ($list as $key => $value) {
