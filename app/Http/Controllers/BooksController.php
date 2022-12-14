@@ -217,15 +217,16 @@ public function index(Request $request)
 //公開　関数　importCSV(受け取った要求)
   public function importCSV(Request $request)
   {
-
+    $validator = $this->validateUploadFile($request);
      //postで受け取ったcsvファイルデータ
      //$file = 受け取った要求->file（'CSVアップロード時の渡されたデータ'）
      $file = $request->file('csvdata');
      //もし($fileにデータが渡されていなかったら)
-    if(is_null($file)){
-        //／の画面にもどる->とともに(message,ファイルを選択してください)；
-        return redirect('/')->with('message', 'ファイルを選択してください');
-    }
+     if ($validator->fails() === true){
+            return redirect('/')->with('message', $validator->errors()->first('csvdata'));
+        }
+     
+
      //Goodby CSVのconfig設定
      //設定値 = 新しい 語彙設定();
      $config = new LexerConfig();
@@ -348,7 +349,18 @@ public function index(Request $request)
      }
 
 
-
+    public function validateUploadFile(Request $request)
+    {
+        return Validator::make($request->all(), [
+                'csvdata' => 'required|file|mimetypes:text/plain|mimes:csv,txt',
+            ], [
+                'csvdata.required'  => 'ファイルを選択してください。',
+                'csv_file.file'      => 'ファイルアップロードに失敗しました。',
+                'csv_file.mimetypes' => 'ファイル形式が不正です。',
+                'csv_file.mimes'     => 'ファイル拡張子が異なります。',
+            ]
+        );
+    }
 
 
 
@@ -384,12 +396,7 @@ public function index(Request $request)
 
     }
 
-            if (!is_null($sample)) {
-                $csv_errors[$key][] = $number . ' は登録済みのNoです。';
- 
-            } elseif ($number_count[$number] > 1) {
-                $csv_errors[$key][] = 'No ' . $number . ' はcsvファイル内で重複しています。';
-            }
+
     
      //・公開関数 stores(Request $request)
     public function stores(Request $request)
@@ -523,18 +530,7 @@ public function index(Request $request)
      * @param Request $request
      * @return Illuminate\Validation\Validator
      */
-    private function validateUploadFile(Request $request)
-    {
-        return \Validator::make($request->all(), [
-                'csv_file' => 'required|file|mimetypes:text/plain|mimes:csv,txt',
-            ], [
-                'csv_file.required'  => 'ファイルを選択してください。',
-                'csv_file.file'      => 'ファイルアップロードに失敗しました。',
-                'csv_file.mimetypes' => 'ファイル形式が不正です。',
-                'csv_file.mimes'     => 'ファイル拡張子が異なります。',
-            ]
-        );
-    }
+
 
     /**
      * バリデーションの定義

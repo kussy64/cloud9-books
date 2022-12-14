@@ -59,11 +59,6 @@
 
        
 　　@if (session('message')) 
-　　    @foreach ($message as $key => $val)
-   @foreach($val as $msg) 
-       <span class="error">データ{{ $key }}件目 ： {{ $msg }}</span>
-   @endforeach
-@endforeach
       <div class="alert alert-success">
           {{ session('message') }}
       </div>
