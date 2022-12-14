@@ -355,13 +355,36 @@ public function index(Request $request)
                 'csvdata' => 'required|file|mimetypes:text/plain|mimes:csv,txt',
             ], [
                 'csvdata.required'  => 'ファイルを選択してください。',
-                'csv_file.file'      => 'ファイルアップロードに失敗しました。',
-                'csv_file.mimetypes' => 'ファイル形式が不正です。',
-                'csv_file.mimes'     => 'ファイル拡張子が異なります。',
+                'csvdata.file'      => 'ファイルアップロードに失敗しました。',
+                'csvdata.mimetypes' => 'ファイル形式が不正です。',
+                'csvdata.mimes'     => 'ファイル拡張子が異なります。',
             ]
         );
     }
 
+    public function defineValidationRules()
+    {
+        return [
+            // CSVデータ用バリデーションルール
+           'item_name' => 'unique:books,item_name|required|min:3|max:255',
+           //item_textがDBのbooksテーブルに既に存在しているのか、空欄ではないか、3文字以下、255文字を超えていないか確認
+          'item_text' => 'unique:books|required|min:3|max:255',
+           //user_idが空欄ではないか
+           'user_id' => 'required',
+           //item_amountが空欄ではないか
+          'item_amount' => 'required',
+           //publishedが空欄ではないか
+          'published' => 'required'
+        ];
+    }
+    
+    private function defineValidationMessages()
+    {
+        return [
+            // CSVデータ用バリデーションエラーメッセージ
+            'content.required' => '内容を入力してください。',
+        ];
+    }
 
 
     public function ajax_store(Request $request) {
@@ -532,31 +555,7 @@ public function index(Request $request)
      */
 
 
-    /**
-     * バリデーションの定義
-     *
-     * @return array
-     */
-    private function defineValidationRules()
-    {
-        return [
-            // CSVデータ用バリデーションルール
-            'content' => 'required',
-        ];
-    }
 
-    /**
-     * バリデーションメッセージの定義
-     *
-     * @return array
-     */
-    private function defineValidationMessages()
-    {
-        return [
-            // CSVデータ用バリデーションエラーメッセージ
-            'content.required' => '内容を入力してください。',
-        ];
-    }
     
     
 }
