@@ -201,18 +201,7 @@ public function index(Request $request)
         );
     }
     
-        public function rules()
-    {
-        return [
-            'csv_file' => [
-                'required',
-                'max:1024', // php.iniのupload_max_filesizeとpost_max_sizeを考慮する必要があるので注意
-                'file',
-                'mimes:csv,txt', // mimesの都合上text/csvなのでtxtも許可が必要
-                'mimetypes:text/plain',
-            ],
-        ];
-    }
+
     
 //公開　関数　importCSV(受け取った要求)
   public function importCSV(Request $request)
@@ -322,16 +311,16 @@ public function index(Request $request)
           'published' => 'required'
         ]);
         //もしバリデーションが失敗したら
-            if ($validator->fails() === true) {
-                $error_list[$count] = $validator->errors()->all();
-            }
+
 
             $count++;
-            $conversion = implode($error_list[$count]);
+            
         
-        if (count($conversion) > 0) {
+        if ($validator->fails()) {
            //／の画面に行きバリデーションメッセージを出す
-           return redirect('/')->withErrors($validator)->withInput()->with($conversion . '件の項目を読み込みました');
+               return redirect('/')
+        ->withInput()
+        ->withErrors($validator);
         }
         
         //dataに変数$arrを入れる
