@@ -17,9 +17,13 @@ class Book extends Model
     {
         // CSVヘッダとテーブルのカラムを関連付けておく
         $list = [
+            'user_id' => "ユーザー番号",
             'item_name' => "書籍名",
             'item_text'    => "詳細情報",
+            'item_number' => "在庫数",
             'item_amount' => "金額",
+            'item_img' => "画像",
+            'published' => "公開日",
         ];
 
         foreach ($list as $key => $value) {
