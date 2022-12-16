@@ -158,7 +158,9 @@ public function index(Request $request)
         return redirect('/')->with('message', '削除が完了しました');
     }
     //CSV処理
+        //・公開メソッドpostCsv
         public function postCsv(Request $request) {
+        //戻り値　返答()->streamDownload
         return response()->streamDownload(
             function () {
                 // 出力バッファをopen
@@ -281,20 +283,22 @@ public function index(Request $request)
         	case 5:
         	$arr['item_img'] = $v;
         	break;
-        	
+        	//6ならpublishedに値$vを入れる
         	case 6:
         	$arr['published'] = $v;
         	break;
         	
 
         	
-
+            //デフォルトではbreakを行う。
         	default:
         	break;
             }
 
         }
+        //・配列error_listを作成
        $error_list = [];
+       //・カウントを1にする
         $count = 1;
 
                         //　バリデーション処理
@@ -311,19 +315,21 @@ public function index(Request $request)
           'published' => 'required'
         ]);
         //もしバリデーションが失敗したら
-
-
+            $validated = $validator->validated();
+            //dd($validator);
             $count++;
             
-        
+        //・バリデーションがあるなら
         if ($validator->fails()) {
            //／の画面に行きバリデーションメッセージを出す
-               return redirect('/')
+               return redirect('/')->with($validated)
+        //・セッション(_old_input)に入力値すべてを入れる
         ->withInput()
+        //・セッション(errors)にエラーの情報を入れる
         ->withErrors($validator);
         }
         
-        //dataに変数$arrを入れる
+        //dataに変数$arrを入れる（変数をからdata配列に変更）
         $data[] = $arr;
         
 
@@ -336,8 +342,8 @@ public function index(Request $request)
     return redirect('/')->with('message', $count . 'CSVのデータを読み込みました');
 
      }
-
-
+    
+    //・CSVファイルバリデーションチェック用のメソッド
     public function validateUploadFile(Request $request)
     {
         return Validator::make($request->all(), [
@@ -350,7 +356,7 @@ public function index(Request $request)
             ]
         );
     }
-
+    //・公開メソッド（バリデーションルール設定用）
     public function defineValidationRules()
     {
         return [
@@ -366,12 +372,22 @@ public function index(Request $request)
           'published' => 'required'
         ];
     }
-    
-    private function defineValidationMessages()
+    //・公開メソッド（バリデーションエラーメッセージ専用）
+    public function defineValidationMessages()
     {
         return [
             // CSVデータ用バリデーションエラーメッセージ
-            'content.required' => '内容を入力してください。',
+            'item_name.unique:books,item_name' => '値が重複しています。',
+            'item_name.required' => '内容を入力してください。',
+            'item_name.min:3' => '3文字以上で入力してください。',
+            'item_name.max:255' => '255文字以内で入力してください。',
+            'item_text.unique:books,item_text' => '値が重複しています。',
+            'item_text.required' => '内容を入力してください。',
+            'item_text.min:3' => '3文字以上で入力してください。',
+            'item_text.max:255' => '255文字以内で入力してください。',
+            'user_id.required' => '内容を入力してください。',
+            'item_amount.required' => '内容を入力してください。',
+            'published.required' => '内容を入力してください。',
         ];
     }
 
