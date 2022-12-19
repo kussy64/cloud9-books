@@ -247,7 +247,7 @@ public function index(Request $request)
      //データ = 配列();
      $data = array();
      
-
+    
      // CSVのデータを配列化
      //foreach(列 as 変数key => 変数value)
      foreach ($rows as $key => $value) {
@@ -299,7 +299,7 @@ public function index(Request $request)
         //・配列error_listを作成
        //$error_list = [];
        //・カウントを1にする
-        $count = 1;
+        //$count = 1;
 
                         //　バリデーション処理
         $validator = Validator::make($arr,[
@@ -320,6 +320,7 @@ public function index(Request $request)
             
         //・バリデーションがあるなら
         if ($validator->fails()) {
+            $validator->errors()->add('line', $key);
            //／の画面に行きバリデーションメッセージを出す
                return redirect('/')->with($validated)
         //・セッション(_old_input)に入力値すべてを入れる
@@ -345,6 +346,7 @@ public function index(Request $request)
     //・CSVファイルバリデーションチェック用のメソッド
     public function validateUploadFile(Request $request)
     {
+        //CSVファイルが正しいかどうかバリデーションを行う
         return Validator::make($request->all(), [
                 'csvdata' => 'required|file|mimetypes:text/plain|mimes:csv,txt',
             ], [
