@@ -297,7 +297,7 @@ public function index(Request $request)
 
         }
         //・配列error_listを作成
-       $error_list = [];
+       //$error_list = [];
        //・カウントを1にする
         $count = 1;
 
@@ -314,7 +314,6 @@ public function index(Request $request)
            //publishedが空欄ではないか
           'published' => 'required'
         ]);
-        //もしバリデーションが失敗したら
             $validated = $validator->validated();
             //dd($validator);
             $count++;
@@ -339,7 +338,7 @@ public function index(Request $request)
     Book::insert($data);
     //dataの内容をDBにインサート
     //／の画面に戻りCSVのデータを読み込みましたと表示
-    return redirect('/')->with('message', $count . 'CSVのデータを読み込みました');
+    return redirect('/')->with('message','CSVのデータを読み込みました');
 
      }
     
@@ -392,40 +391,7 @@ public function index(Request $request)
     }
 
 
-    public function ajax_store(Request $request) {
 
-        $csv_rules = [
-            0 => 'unique:books,item_name|required|min:3|max:255',
-            1 => 'required|string',
-            2 => 'required|string|min:6'
-            
-        ];
-        $request->validate([
-            'csv_file' => [
-                'required',
-                'file',
-                new Csv($csv_rules, 'sjis-win')
-            ]
-        ]);
-
-        $csv_data = $request->csv_file_data; // パッケージが作成したCSVデータ
-
-        foreach($csv_data as $row_data) {
-
-            $user = new \App\User();
-            $user->email = $row_data[0];
-            $user->name = $row_data[1];
-            $user->password = bcrypt($row_data[2]);
-            $user->save();
-
-        }
-
-        return ['result' => true];
-
-    }
-
-
-    
      //・公開関数 stores(Request $request)
     public function stores(Request $request)
     {
