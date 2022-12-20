@@ -244,7 +244,7 @@ public function index(Request $request)
      // CSVデータをパース
      //語彙->解析($file,通訳者);
      $lexer->parse($file, $interpreter);
-     //データ = 配列();
+     //データ = 配列();$data変数にCSVデータを入れている
      $data = array();
      
     
@@ -300,20 +300,22 @@ public function index(Request $request)
        //$error_list = [];
        //・カウントを1にする
         //$count = 1;
+        $validator = $this->defineValidationRules($arr);
+        $this->defineValidationMessages($arr);
 
                         //　バリデーション処理
-        $validator = Validator::make($arr,[
+        //$validator = Validator::make($arr,[
             //item_nameがDBのbooksテーブルに既に存在しているのか、空欄ではないか、3文字以下、255文字を超えていないか確認
-           'item_name' => 'unique:books,item_name|required|min:3|max:255',
+          // 'item_name' => 'unique:books,item_name|required|min:3|max:255',
            //item_textがDBのbooksテーブルに既に存在しているのか、空欄ではないか、3文字以下、255文字を超えていないか確認
-          'item_text' => 'unique:books|required|min:3|max:255',
+          //'item_text' => 'unique:books|required|min:3|max:255',
            //user_idが空欄ではないか
-           'user_id' => 'required',
+           //'user_id' => 'required',
            //item_amountが空欄ではないか
-          'item_amount' => 'required',
+          //'item_amount' => 'required',
            //publishedが空欄ではないか
-          'published' => 'required'
-        ]);
+          //'published' => 'required'
+        //]);
             //$validated = $validator->validated();
             //dd($validator);
             $count++;
