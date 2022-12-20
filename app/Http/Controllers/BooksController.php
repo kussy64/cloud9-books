@@ -314,7 +314,7 @@ public function index(Request $request)
            //publishedが空欄ではないか
           'published' => 'required'
         ]);
-            $validated = $validator->validated();
+            //$validated = $validator->validated();
             //dd($validator);
             $count++;
             
@@ -322,7 +322,7 @@ public function index(Request $request)
         if ($validator->fails()) {
             $validator->errors()->add('line', $key);
            //／の画面に行きバリデーションメッセージを出す
-               return redirect('/')->with($validated)
+               return redirect('/')
         //・セッション(_old_input)に入力値すべてを入れる
         ->withInput()
         //・セッション(errors)にエラーの情報を入れる
