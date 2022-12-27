@@ -300,9 +300,9 @@ public function index(Request $request)
        //$error_list = [];
        //・カウントを1にする
         //$count = 1;
-        $validator = $this->defineValidationRules($arr);
-        $this->defineValidationMessages($arr);
-
+        $validator = \Validator::make($this->defineValidationRules($arr),
+        $this->defineValidationMessages($arr)
+        );
                         //　バリデーション処理
         //$validator = Validator::make($arr,[
             //item_nameがDBのbooksテーブルに既に存在しているのか、空欄ではないか、3文字以下、255文字を超えていないか確認
@@ -360,7 +360,7 @@ public function index(Request $request)
         );
     }
     //・公開メソッド（バリデーションルール設定用）
-    public function defineValidationRules()
+    public function defineValidationRules($arr)
     {
         return [
             // CSVデータ用バリデーションルール
@@ -376,7 +376,7 @@ public function index(Request $request)
         ];
     }
     //・公開メソッド（バリデーションエラーメッセージ専用）
-    public function defineValidationMessages()
+    public function defineValidationMessages($arr)
     {
         return [
             // CSVデータ用バリデーションエラーメッセージ
