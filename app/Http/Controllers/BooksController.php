@@ -300,28 +300,28 @@ public function index(Request $request)
        //$error_list = [];
        //・カウントを1にする
         //$count = 1;
-        $validator = \Validator::make($this->defineValidationRules($arr),
-        $this->defineValidationMessages($arr)
-        );
+        //$validator = Validator::make($this->defineValidationRules($arr),
+        //$this->defineValidationMessages($arr)
+        //);
                         //　バリデーション処理
-        //$validator = Validator::make($arr,[
+        $validator = Validator::make($arr,[
             //item_nameがDBのbooksテーブルに既に存在しているのか、空欄ではないか、3文字以下、255文字を超えていないか確認
-          // 'item_name' => 'unique:books,item_name|required|min:3|max:255',
+            'item_name' => 'unique:books,item_name|required|min:3|max:255',
            //item_textがDBのbooksテーブルに既に存在しているのか、空欄ではないか、3文字以下、255文字を超えていないか確認
-          //'item_text' => 'unique:books|required|min:3|max:255',
+          'item_text' => 'unique:books|required|min:3|max:255',
            //user_idが空欄ではないか
-           //'user_id' => 'required',
+           'user_id' => 'required',
            //item_amountが空欄ではないか
-          //'item_amount' => 'required',
+          'item_amount' => 'required',
            //publishedが空欄ではないか
-          //'published' => 'required'
-        //]);
+          'published' => 'required'
+        ]);
             //$validated = $validator->validated();
             //dd($validator);
             $count++;
             
         //・バリデーションがあるなら
-        if ($validator->fails()) {
+        if ($validator->fails()=== true) {
             $validator->errors()->add('line', $key);
            //／の画面に行きバリデーションメッセージを出す
                return redirect('/')
@@ -360,7 +360,7 @@ public function index(Request $request)
         );
     }
     //・公開メソッド（バリデーションルール設定用）
-    public function defineValidationRules($arr)
+    public function defineValidationRules()
     {
         return [
             // CSVデータ用バリデーションルール
@@ -376,7 +376,7 @@ public function index(Request $request)
         ];
     }
     //・公開メソッド（バリデーションエラーメッセージ専用）
-    public function defineValidationMessages($arr)
+    public function defineValidationMessages()
     {
         return [
             // CSVデータ用バリデーションエラーメッセージ
