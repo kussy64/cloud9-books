@@ -59,6 +59,7 @@
 
        
 　　@if (session('message')) 
+　　<div>{{ $validator }}</div>
       <div class="alert alert-success">
           {{ session('message') }}
       </div>
