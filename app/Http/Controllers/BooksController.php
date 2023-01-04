@@ -324,7 +324,7 @@ public function index(Request $request)
         if ($validator->fails()=== true) {
             $validator->errors()->add('line', $key);
            //／の画面に行きバリデーションメッセージを出す
-               return redirect('/',compact('validator'))
+               return view('/',compact('validator'))
         //・セッション(_old_input)に入力値すべてを入れる
         ->withInput()
         //・セッション(errors)にエラーの情報を入れる
