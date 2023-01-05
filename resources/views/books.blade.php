@@ -63,7 +63,7 @@
           {{ session('validator') }}
       </div>
   @endif
-  
+
   
   
       <v-row justify="center">

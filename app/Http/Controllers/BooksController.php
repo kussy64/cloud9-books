@@ -296,6 +296,7 @@ public function index(Request $request)
             }
 
         }
+        //dd($arr);
         //・配列error_listを作成
        //$error_list = [];
        //・カウントを1にする
@@ -317,14 +318,15 @@ public function index(Request $request)
           'published' => 'required'
         ]);
             //$validated = $validator->validated();
-            //dd($validator);
-            $count++;
+            //dd($arr);
+            //$count++;
             
         //・バリデーションがあるなら
         if ($validator->fails()=== true) {
+            dd($arr);
             $validator->errors()->add('line', $key);
            //／の画面に行きバリデーションメッセージを出す
-               return redirect('/')
+               return redirect('/')->with('message','CSVデータを読み込みました')
         //・セッション(_old_input)に入力値すべてを入れる
         ->withInput()
         //・セッション(errors)にエラーの情報を入れる
