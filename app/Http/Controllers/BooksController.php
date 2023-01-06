@@ -297,13 +297,6 @@ public function index(Request $request)
 
         }
         //dd($arr);
-        //・配列error_listを作成
-       //$error_list = [];
-       //・カウントを1にする
-        //$count = 1;
-        //$validator = Validator::make($this->defineValidationRules($arr),
-        //$this->defineValidationMessages($arr)
-        //);
                         //　バリデーション処理
         $validator = Validator::make($arr,[
             //item_nameがDBのbooksテーブルに既に存在しているのか、空欄ではないか、3文字以下、255文字を超えていないか確認
@@ -323,10 +316,10 @@ public function index(Request $request)
             
         //・バリデーションがあるなら
         if ($validator->fails()=== true) {
-            dd($arr);
+            //dd($arr);
             $validator->errors()->add('line', $key);
            //／の画面に行きバリデーションメッセージを出す
-               return redirect('/')->with('message','CSVデータを読み込みました')
+               return redirect('/', compact('arr'))->with('message','CSVデータを読み込みました')
         //・セッション(_old_input)に入力値すべてを入れる
         ->withInput()
         //・セッション(errors)にエラーの情報を入れる

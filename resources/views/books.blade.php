@@ -62,6 +62,9 @@
       <div class="alert alert-success">
           {{ session('validator') }}
       </div>
+        @foreach($arr as $data)
+    <p>{{ $data }}</p>
+  @endforeach
   @endif
 
   
