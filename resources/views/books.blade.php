@@ -60,11 +60,8 @@
        
 　　@if (session('message')) 
       <div class="alert alert-success">
-          {{ session('validator') }}
+          {{ session('massege') }}
       </div>
-        @foreach($arr as $data)
-    <p>{{ $data }}</p>
-  @endforeach
   @endif
 
   
