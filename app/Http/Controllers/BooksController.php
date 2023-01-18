@@ -314,12 +314,15 @@ public function index(Request $request)
             //dd($arr);
             //$count++;
             
-        //・バリデーションがあるなら
+        //・バリデーションがあるなら以下の処理を行う
         if ($validator->fails()=== true) {
-            //dd($arr);
-            $validator->errors()->add('line', $key);
-           //／の画面に行きバリデーションメッセージを出す
-               return redirect('/', compact('arr'))->with('message','CSVデータを読み込みました')
+            //dd($arr['item_name','item_text']);
+            //変数dataにitem_nameを入れる
+            $data = $arr['item_name'];
+            
+            $validator->errors();
+           //／の画面に行きバリデーションメッセージを出す(arr変数をViewに渡す)
+               return redirect('/')->with(compact('data'))
         //・セッション(_old_input)に入力値すべてを入れる
         ->withInput()
         //・セッション(errors)にエラーの情報を入れる

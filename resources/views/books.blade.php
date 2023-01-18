@@ -58,9 +58,10 @@
 
 
        
-　　@if (session('message')) 
+　　@if (session('data')) 
+　　 <p>既に入っている書籍名: {{ session('data') }}</p>
       <div class="alert alert-success">
-          {{ session('massege') }}
+          {{ session('message') }}
       </div>
   @endif
 
