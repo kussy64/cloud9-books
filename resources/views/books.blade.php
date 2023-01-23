@@ -58,13 +58,13 @@
 
 
        
-　　@if (session('data')) 
-　　 <p>既に入っている書籍名: {{ session('data') }}</p>
-      <div class="alert alert-success">
-          {{ session('message') }}
-      </div>
+　　@if (session('data_name')) 
+　　@if (session('data_text')) 
+　　 <p>・既に入っている書籍名: {{ session('data_name') }}</p>
+　　 <p>・既に入っている詳細情報: {{ session('data_text') }}</p>
+     
   @endif
-
+@endif
   
   
       <v-row justify="center">

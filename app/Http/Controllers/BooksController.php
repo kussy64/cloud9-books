@@ -318,11 +318,15 @@ public function index(Request $request)
         if ($validator->fails()=== true) {
             //dd($arr['item_name','item_text']);
             //変数dataにitem_nameを入れる
-            $data = $arr['item_name'];
+            $data_name = $arr['item_name'];
+            $data_text = $arr['item_text'];
             
             $validator->errors();
            //／の画面に行きバリデーションメッセージを出す(arr変数をViewに渡す)
-               return redirect('/')->with(compact('data'))
+               return redirect('/')->with([
+                   'data_name'=>$data_name,
+                   'data_text'=>$data_text
+                   ])
         //・セッション(_old_input)に入力値すべてを入れる
         ->withInput()
         //・セッション(errors)にエラーの情報を入れる
